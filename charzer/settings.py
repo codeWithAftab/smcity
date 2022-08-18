@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'agent',
     'customer',
-    # 'organization',
+    'organization',
+    'supervisor',
     'device',
     'transaction',
 ]

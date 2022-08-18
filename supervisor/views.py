@@ -1,6 +1,8 @@
-
+from operator import truediv
 from django.shortcuts import render
+
 # Create your views here.
+
 from rest_framework.serializers import Serializer
 # from customer.serializers import user_profile_serializer
 from customer.models import user_profile
@@ -17,11 +19,12 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
-from organization.models import organization
-from organization.serializers import organizationserializer, organizationserialzerupdate
+
+from supervisor.models import supervisor
+from supervisor.serializers import supervisorserializer, supervisorserialzerupdate
 
 
-class becomeOrganization(APIView):
+class becomeSupervisor(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes  = [IsAuthenticated]
     def post(self, request):
@@ -30,23 +33,23 @@ class becomeOrganization(APIView):
             user = user_profile.objects.get(user=request.user)
             if user.is_verified and user.user_type=="customer":
                 data = request.data
-                o = organization(user=request.user,bank_acc_no=data["bank_acc_no"], bank_name=data["bank_name"],bank_acc_type=data["bank_acc_type"],bank_ifsc=data["bank_ifsc"])
-                o.org_is_active = True
-                o.save()
-                user.user_type = "organization"
-                user.is_org = True
+                s = supervisor(user=request.user,service_provider=data["service_provider"], bank_acc_no=data["bank_acc_no"], bank_name=data["bank_name"],bank_acc_type=data["bank_acc_type"],bank_ifsc=data["bank_ifsc"])
+                s.supervisor_is_active = True
+                s.save()
+                user.is_supervisor = True
+                user.user_type = "supervisor"
                 user.save()
                 msg = {
-                    "msg":"you are now a organization org registration successfull",
+                    "msg":"you are now a supervisor",
                     "res": "successful"
                 }
-                # serializer = organizationserialzer(o)
-                serializer = organizationserializer(o)
+                # serializer = supervisorserialzer(s)
+                serializer = supervisorserializer(s)
                 msg.update(serializer.data)
                 return Response(msg, status=status.HTTP_200_OK)
             else:
                 msg = {
-                    "msg":"You are already a organization or Your user id is not verified",
+                    "msg":"You are already a supervisor or Your user id is not verified",
                     "res":"fail"
                 }
                 return Response(msg, status=status.HTTP_400_BAD_REQUEST)
@@ -57,25 +60,18 @@ class becomeOrganization(APIView):
             }
             return Response(msg, status=status.HTTP_400_BAD_REQUEST)
 
-class organizationdetail(APIView):
+class supervisorDetail(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes  = [IsAuthenticated]
-    def get(sel, request):
+    def get(self, request):
         try :
             user = user_profile.objects.get(user=request.user)
-            if user.user_type == "organization":
-                org = organization.objects.get(user=request.user)
-                print(org)
-                serializer = organizationserializer(org)
+            if user.user_type == "supervisor":
+                print("############")
+                sup = supervisor.objects.get(user=request.user)
+            # print(sup)
+                serializer = supervisorserializer(sup)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                msg = {
-                    "msg":"your user type is not organisation.",
-                    "res":"failed"
-                }
-
-                return Response(msg, status=status.HTTP_400_BAD_REQUEST)
-
 
         except Exception as e:
             # print(e)
@@ -83,12 +79,12 @@ class organizationdetail(APIView):
 
     def post(self, request):
         try :
-            org = organization.objects.get(user=request.user)
-            serializer = organizationserialzerupdate(org, data=request.data, partial=True)
+            sup = supervisor.objects.get(user=request.user)
+            serializer = supervisorserialzerupdate(sup, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
-                org = organization.objects.get(user=request.user)
-                se = organizationserializer(org)
+                sup = supervisor.objects.get(user=request.user)
+                se = supervisorserializer(sup)
                 # return Response(serializer.data, status=status.HTTP_200_OK)
                 return Response(se.data, status=status.HTTP_200_OK)
 
@@ -97,3 +93,4 @@ class organizationdetail(APIView):
 
         except Exception as e:
             return Response({"msg":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+

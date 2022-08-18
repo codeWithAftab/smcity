@@ -25,8 +25,9 @@ class becomeAgent(APIView):
                 data = request.data
                 print(data)
                 a = agent(user=request.user,service_provider=data["service_provider"], bank_acc_no=data["bank_acc_no"], bank_name=data["bank_name"],bank_acc_name=data["bank_acc_name"],bank_ifsc=data["bank_ifsc"])
-                a.save()
                 a.agent_is_active = True
+                a.save()
+                user.is_agent = True
                 user.user_type = "agent"
                 user.save()
                 msg = {
