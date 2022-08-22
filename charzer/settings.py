@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-)t+e*_%x^@)k7))0tmyhozscxm_^#a!t(yoj=uc(1)$$#g%x-p
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+# CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
@@ -43,11 +44,14 @@ INSTALLED_APPS = [
     'customer',
     'organization',
     'supervisor',
+    'corsheaders',
     'device',
     'transaction',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,7 +81,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'charzer.wsgi.application'
 
-
+# CORS_ALLOW_HEADERS = ('content-disposition', 'accept-encoding',
+                    #   'content-type', 'accept', 'origin', 'authorization',"cache-control")
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -139,3 +144,27 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 website_name = "https://aman101012.pythonanywhere.com"
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:9000",
+]
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]

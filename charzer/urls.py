@@ -23,8 +23,8 @@ urlpatterns = [
     path("customer/",include("customer.urls")),
     path("agent/",include("agent.urls")),
     path("device/",include("device.urls")),
-    path("organization",include("organization.urls")),
-    path("supervisor",include("supervisor.urls")),
+    path("organization/",include("organization.urls")),
+    path("supervisor/",include("supervisor.urls")),
     path("transaction/",include("transaction.urls")),
 ]
 

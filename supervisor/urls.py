@@ -4,8 +4,8 @@ from supervisor import views
 
 
 urlpatterns =[
-    path("/register/",views.becomeSupervisor.as_view()),
-    path("/detail/",views.supervisorDetail.as_view())
+    path("register/",views.becomeSupervisor.as_view()),
+    path("detail/",views.supervisorDetail.as_view())
 ]
 
 
