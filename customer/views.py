@@ -97,22 +97,16 @@ class user_profile_api(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes  = [IsAuthenticated]
 
-    # def get(self, request):
-    #     u = user_profile.objects.get(user=request.user)
-
-    #     serializer = user_profile_serializer(u)
-    #     return Response(serializer.data)
-
     def get(self, request):
         try :
             u = user_profile.objects.get(user=request.user)
-            print(u)
+            print("here",u)
             serializer = user_profile_serializer(u)
             dat = serializer.data
             dat["user_photo"] = settings.website_name + dat["user_photo"]
             return Response(dat)
         except Exception as e:
-            return Response(serializer.errors, status=status)
+            return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     def post(self, request):
         try:
             user = user_profile.objects.get(user=request.user)
