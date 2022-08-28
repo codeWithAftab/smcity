@@ -24,4 +24,5 @@ class user_profile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     wallet_amt = models.FloatField(default=0)
-
+    def __str__(self) -> str:
+        return str(self.user_name)

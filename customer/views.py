@@ -61,7 +61,7 @@ class user_register(APIView):
                     "resp":"username-not-available"
                 }
 
-                return Response(msg)
+                return Response(msg,status=status.HTTP_400_BAD_REQUEST)
 
             else:
                 username = request.data.get('username')
@@ -77,7 +77,7 @@ class user_register(APIView):
 
                         # print(token.key)
                     except Exception as e:
-                        return Response({"msg":f"{e}","resp":"fail"})
+                        return Response({"msg":f"hey {e}","resp":"fail"},status=status.HTTP_400_BAD_REQUEST)
 
                     token = Token.objects.create(user=user)
                     return Response({"msg":"created user successfully","resp":"successful","token": str(token)})

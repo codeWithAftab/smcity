@@ -7,4 +7,4 @@ from customer.models import user_profile
 class user_profile_serializer(serializers.ModelSerializer):
     class Meta:
         model = user_profile
-        fields = ["user_name","user_photo","user_type","is_agent","user_phone","user_email","is_verified","wallet_amt"]
+        fields = ["user_name","user_photo","user_type","is_agent","user_phone","user_email","user_address","user_state","user_zipcode","user_city","is_verified","wallet_amt"]
