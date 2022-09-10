@@ -1,9 +1,3 @@
-from distutils.sysconfig import EXEC_PREFIX
-from functools import partial
-from msilib.schema import Class
-from operator import truediv
-from pstats import Stats
-from django.shortcuts import render
 # Create your views here.
 from agent.models import agent
 from rest_framework.serializers import Serializer
