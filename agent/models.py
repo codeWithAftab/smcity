@@ -11,6 +11,7 @@ class agent(models.Model):
     agent_id = models.AutoField(auto_created=True, primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  #here onetoonefield changed in foreighn key by aftab..
     service_provider = models.CharField(max_length=30, null=True)
+    supervisor_username = models.CharField(max_length=100,default="")
     balance_amount = models.FloatField(default=0)
     bank_acc_no = models.CharField(max_length=50)
     bank_name = models.CharField(max_length=30)
