@@ -8,10 +8,12 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import json
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from agent.models import agent
+from supervisor.models import sup_agent
 from agent.serializers import agentserializer, agentserialzerupdate
 
 class becomeAgent(APIView):
@@ -84,3 +86,64 @@ class agentdetail(APIView):
 
         except Exception as e:
             return Response({"msg":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+
+class myrequests(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    # def post(self, request):
+    #     try:
+    #         print(request.user)
+    #         user = agent.objects.get(user=request.user)
+    #         print(user)
+    #         data = request.data
+    #         supuser = User.objects.get(username=data["supervisor"])
+    #         sup = supervisor.objects.get(user=supuser)
+    #         # if sup_agent.objects.filter(supervisor=sup):
+    #         #     print("hi")
+    #         #     msg = {
+    #         #         "msg":""
+    #         #     }
+
+    #         print(sup)
+    #         print(supuser)
+
+    #         agentLis = sup_agent(agent=user, supervisor=sup)
+
+    #         agentLis.save()
+    #         print("success")
+    #         msg = {
+    #             "msg": "Your Request sent success fully status pending",
+    #             "status": "pending"
+    #         }
+    #         return Response(msg, status=status.HTTP_200_OK)
+
+    #     except Exception as e:
+    #         return Response({"msg": f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        try:
+            user = user_profile.objects.get(user=request.user)
+            if user.is_agent:
+                print("############")
+                ag = agent.objects.get(user=request.user)
+                agentlists = list(sup_agent.objects.filter(agent=ag))
+                myagentLists = []
+                for myagent in agentlists:
+                    myobj = {}
+                    myobj.update(vars(myagent))
+                    myobj["supervisorName"] = myagent.supervisor.user.username
+                    myobj["agentName"] = myagent.agent.user.username
+                    print(myobj["supervisorName"])
+                    myobj.pop("_state")
+                    myagentLists.append(myobj)
+                    print(myobj)
+            # serializer = supervisorserializer(sup)
+                    return Response({"msg":"success","data":json.dumps(myagentLists)}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            # print(e)
+            return Response({"msg": f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except:
+            pass

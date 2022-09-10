@@ -5,7 +5,8 @@ from agent import views
 
 urlpatterns =[
     path("register/",views.becomeAgent.as_view()),
-    path("detail/",views.agentdetail.as_view())
+    path("detail/",views.agentdetail.as_view()),
+    path("myrequests/",views.myrequests.as_view()),
 ]
 
 
